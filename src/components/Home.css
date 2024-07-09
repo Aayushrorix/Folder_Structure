@@ -1,0 +1,135 @@
+.heading{
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.add-folder{
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.folder{
+    margin-left: 10px;
+}
+
+.file{
+    margin-left: 10px;
+}
+
+.folder-strucrure{
+    padding-inline-start: 25px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+    list-style-type: none;
+}
+ul {
+    /* list-style-type: square; */
+    /* unicode-bidi: isolate;
+    display: block;
+    list-style-type: none;
+    margin-block-start: 0px;
+    margin-block-end: 0px; */
+
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 20px;
+    unicode-bidi: isolate;
+}
+
+.image{
+    width: 20px;
+    margin-right: 10px;
+    height: 20px;
+}
+
+p{
+    display: flex;
+}
+
+.list-node{
+    margin-top: 20px;
+}
+
+.list-tree {
+    display: flex;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+.tree-lines:before{
+    display: flex;
+    background-color: #000;
+    content: "";
+    height: 49px;
+    left: -21px;
+    position: relative;
+    width: 2px;
+    top: -30px;
+}
+
+.tree-lines:after{
+    display: flex;
+    border-bottom: 2px solid #000000;
+    top: 11px;
+    content: "";
+    left: -20px;
+    position: relative;
+    width: 15px;
+}
+
+.fname{
+    align-items: center;
+}
+
+
+.plus{
+    display: none;
+    height: 20px;
+    width: 20px;
+    background-color: #000;
+    color: #fff;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+    margin-left: 10px;
+    border-radius: 18px;
+    font-weight: 700;
+    content: '+';
+}
+
+.fname:hover .plus{
+    display: inline-block;
+}
+
+.minus{
+    display: none;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    color: #000;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+    margin-left: 10px;
+    border-radius: 18px;
+    font-weight: 700;
+    content: '+';
+    border: 1px solid black;
+}
+
+.fname:hover .minus{
+    display: inline-block;
+}
