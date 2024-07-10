@@ -22,6 +22,8 @@ function home() {
   const [addFileOrFolderFolder,  {isLoading: addFileOrFolderFolderLoading}] = useAddFileOrFolderFolderMutation();
   const [deleteFolderOrFile,  {isLoading: deleteFolderOrFileLoading}] = useDeleteFolderOrFileMutation();
 
+  const [showError, setShowError] = useState(false)
+
   interface QueryState {
       data?: Structure[];
   }
@@ -41,17 +43,19 @@ function home() {
   
   useEffect(()=>{
     setStructures(allStructure)
-    console.log('====>',structures)
   },[getStructureLoading])
 
   function deleteElement(id:string){
     deleteFolderOrFile(id)
+    setCurrentElementId('')
+    setElementName('')
   }
 
   function addElement(id:string){
+    setElementName('')
     setCurrentElementId(id)
     setShowOptions(true)
-    // setShowAddBox(true)
+    setShowAddBox(false)
   }
 
   function selectElement(type:string){
@@ -70,6 +74,7 @@ function home() {
     setShowAddBox(false)
     setElementName('')
     setCurrentElementId('')
+    setShowError(false)
   }
 
   function addWrong(){
@@ -77,55 +82,92 @@ function home() {
     setShowAddBox(false)
     setElementName('')
     setCurrentElementId('')
+    setShowError(false)
   }
 
   function handleOnChange(e:React.ChangeEvent<HTMLInputElement>){
     setElementName(e.target.value)
+    if(e.target.value){
+      setShowError(false)
+    }
+    else{
+      setShowError(true)
+    }
   }
 
 
   function getFolder(structure:Structure){
     return(
       <>
-        <li key={structure._id} className={`${structure.type} tree-lines `}>
+        <li key={structure._id} className={`${structure.type} tree-lines`}>
           <p className='list-tree'>
-            <div>
+            {/* <div> */}
               <img src={structure.type==='folder'?'public/folder.png':'public/file.png'} className='image'></img>
               <span className='fname'>
                 {structure.value}
                 {structure.type==='folder' && <span className='plus' onClick={()=>addElement(structure._id)}>+</span>}
                 {<span className='minus' onClick={() => deleteElement(structure._id)}>-</span>}
               </span>
-            </div>
+            {/* </div> */}
           </p>
+        </li>
+        
           {structure.children.length > 0 && (
-            <div className="folder-strucrure">
+            <ul className="folder-strucrure">
               {structure.children.map((structure)=>(
+                
                 getFolder(structure)
+                
               ))}
-            </div>
+            </ul>
           )}
-
+        
           <div>
             {showOptions && currentElementId===structure._id &&
-              <div className='list-tree'>
-                <button onClick={() => selectElement("file")}>File</button>
-                <button onClick={() => selectElement("folder")} >Folder</button>
-              </div>
+            <ul>
+              <li key={structure._id} className={`${structure.type} tree-lines`}>
+                <p className='list-tree'>
+                  <button onClick={() => selectElement("file")}>File</button>
+                  <button onClick={() => selectElement("folder")} >Folder</button>
+                </p>
+              </li>
+              </ul>
             }
             {showAddBox && currentElementId===structure._id && 
-              <div className='new-root-node list-tree'>
-                <img src={addType==='folder'?'public/folder.png':'public/file.png'} className='image'></img>
-                <form>
-                  <input type='text' name="rootName" value={elementName} onChange={handleOnChange}/>
-                  <button className="add-btn" onClick={() => addRight(structure._id)}>✔</button>
-                  <button className="cancel-btn" onClick={addWrong}>✕</button>
-                </form>
-              </div>
+            <ul>
+              <li key={structure._id} className={`${structure.type} tree-lines`}>
+                <p className='new-root-node list-tree'>
+                  <img src={addType==='folder'?'public/folder.png':'public/file.png'} className='image'></img>
+                  <form>
+                    <input type='text' name="rootName" value={elementName} onChange={handleOnChange}/>
+                    <button disabled={showError} 
+                    // onTouchEnd={()=>{
+                    //   if(elementName){
+                    //     setShowError(false)
+                    //   }
+                    //   else{
+                    //     setShowError(true)
+                    //   }
+                    // }}
+                   className="add-btn" onClick={() => {
+                      if(elementName){
+                        addRight(structure._id)
+                        setShowError(false)
+                      }
+                      else{
+                        setShowError(true)
+                      }
+                    }}>✔</button>
+                    <button className="cancel-btn" onClick={addWrong}>✕</button>
+                  </form>
+                  {showError && <div className='name-error'>Name is required.</div>}
+                </p>
+              </li>
+              </ul>
             }
           </div>
           
-        </li>
+        
       </>
     )
   }
@@ -171,21 +213,35 @@ function home() {
     <div>
         <h1  className="heading">FOLDER STRUCTURE</h1>
 
-        <button type='button' className='add-folder' onClick={clickAddRootFolder}>Add folder to root</button>
+        <div>
+          <button type='button' className='add-folder' onClick={clickAddRootFolder}>Add folder to root</button>
+        </div>
 
-        {(addRootFolderLoading || deleteFolderOrFileLoading || addFileOrFolderFolderLoading || getStructureLoading) && (<img className="img-loader" src="public\ripples.svg" alt="Loading..." />)}
-        {!addRootFolderLoading && <div>
-            {getStructure(allStructure)}
-        </div>}
+        <div>
+          <div>
+            {(addRootFolderLoading || deleteFolderOrFileLoading || addFileOrFolderFolderLoading || getStructureLoading) && (<img className="img-loader" src="public\ripples.svg" alt="Loading..." />)}
+            {!(addRootFolderLoading || deleteFolderOrFileLoading || addFileOrFolderFolderLoading || getStructureLoading) && 
+              <div>
+                  {getStructure(allStructure)}
+              </div>
+            }
+          </div>
 
-        {showRootAddBox && <div className='new-root-node'>
-          <img src='public/folder.png' className='image'></img>
-          <form>
-            <input type='text' name="rootName" value={rootName} onChange={handleRootOnChange}/>
-            <button className="add-btn" onClick={() => addRootRight()}>✔</button>
-            <button className="cancel-btn" onClick={addRootWrong}>✕</button>
-          </form>
-        </div>}
+          {showRootAddBox &&
+            <ul>
+              <li className={`tree-lines`}>
+                <div className='new-root-node'>
+                  <img src='public/folder.png' className='image'></img>
+                  <form>
+                    <input type='text' name="rootName" value={rootName} onChange={handleRootOnChange}/>
+                    <button className="add-btn" onClick={() => addRootRight()}>✔</button>
+                    <button className="cancel-btn" onClick={addRootWrong}>✕</button>
+                  </form>
+                </div>
+              </li>
+            </ul>
+          }
+        </div>
     </div>
   )
 }

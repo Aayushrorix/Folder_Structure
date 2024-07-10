@@ -31,15 +31,9 @@ li {
     text-align: -webkit-match-parent;
     unicode-bidi: isolate;
     list-style-type: none;
+    margin: inherit;
 }
 ul {
-    /* list-style-type: square; */
-    /* unicode-bidi: isolate;
-    display: block;
-    list-style-type: none;
-    margin-block-start: 0px;
-    margin-block-end: 0px; */
-
     display: block;
     list-style-type: disc;
     margin-block-start: 1em;
@@ -58,6 +52,8 @@ ul {
 
 p{
     display: flex;
+    margin-top:-40px;
+    top:-6px
 }
 
 .list-node{
@@ -68,6 +64,7 @@ p{
     display: flex;
     padding-bottom: 5px;
     margin-bottom: 0;
+    position: relative;
 }
 
 .tree-lines:before{
@@ -78,13 +75,13 @@ p{
     left: -21px;
     position: relative;
     width: 2px;
-    top: -30px;
+    top: -22px;
 }
 
 .tree-lines:after{
     display: flex;
     border-bottom: 2px solid #000000;
-    top: 11px;
+    top: -16px;
     content: "";
     left: -20px;
     position: relative;
@@ -170,7 +167,19 @@ input {
 }
 
 .img-loader{
-    margin-left: 500px;
+    /* margin-left: 500px; */
     height: 200px;
     width: 200px;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+}
+
+.name-error{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    color: red;
+    margin-left: 62px;
+    margin-top: 2px;
 }
